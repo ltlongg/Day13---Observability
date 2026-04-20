@@ -5,11 +5,14 @@ from typing import Any
 from openai import OpenAI
 
 from app.config import OPENAI_API_KEY, OPENAI_MODEL, BASE_URL
+from app.incidents import is_enabled
+from app.logging_config import get_logger
 from app.mock_data.students import get_schedule, get_grades, get_exam, get_tuition
 from app.system_prompts import AGENT_RESPONSE_SYSTEM_PROMPT
 from app.text_utils import clean_response_text
 
 client = OpenAI(api_key=OPENAI_API_KEY, base_url=BASE_URL)
+log = get_logger()
 
 _WEEKDAY_VI = {0: "Thứ 2", 1: "Thứ 3", 2: "Thứ 4", 3: "Thứ 5", 4: "Thứ 6", 5: "Thứ 7", 6: "Chủ nhật"}
 
@@ -54,6 +57,16 @@ def execute_tool(tool_name: str, arguments: dict) -> dict:
     func = TOOL_FUNCTIONS.get(tool_name)
     if not func:
         return {"error": f"Unknown tool: {tool_name}"}
+
+    if is_enabled("tool_fail"):
+        log.warning(
+            "incident_triggered",
+            service="tools",
+            incident="tool_fail",
+            tool_name=tool_name,
+            payload={"arguments": arguments},
+        )
+        raise RuntimeError(f"Incident tool_fail triggered while executing {tool_name}")
 
     result = func(**arguments)
 
