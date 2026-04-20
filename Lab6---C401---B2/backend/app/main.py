@@ -17,6 +17,8 @@ from app.documents.metadata_store import (
     remove_document,
 )
 from app.documents.pdf_parser import extract_text_from_pdf
+from app.logging_config import configure_logging
+from app.middleware import CorrelationIdMiddleware
 from app.mock_data.students import get_all_students
 from app.rag.ingestion import (
     add_document_to_index,
@@ -59,6 +61,7 @@ class LoginResponse(BaseModel):
 
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+configure_logging()
 
 
 @asynccontextmanager
@@ -83,6 +86,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(CorrelationIdMiddleware)
 
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
