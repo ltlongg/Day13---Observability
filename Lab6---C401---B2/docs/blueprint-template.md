@@ -83,7 +83,7 @@
   - Bơm các sự kiện lỗi (`rag_slow`, `llm_fault`, `tool_fail`) bằng `scripts/inject_incident.py` để phá vỡ hệ thống theo kịch bản.
   - Phân tích và ghi nhận bằng chứng (Correlation IDs, Log lines, lỗi crash Exception) khi các lỗi xảy ra.
   - Báo cáo và hoàn thiện phần xử lý Incident cho Group Blueprint.
-- [EVIDENCE_LINK]: [Chèn link PR hoặc Commit của bạn tại đây]
+- [EVIDENCE_LINK]: [Do_Xuan_Bang_2A202600044](https://github.com/ltlongg/Day13_C401_B2/commit/931c912000c2cead5317867c625f2863b0f17ebb)
 
 ### [MEMBER_E_NAME]
 
